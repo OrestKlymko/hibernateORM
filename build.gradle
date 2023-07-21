@@ -1,6 +1,8 @@
 plugins {
     id 'java'
+    id "org.flywaydb.flyway" version "9.21.0"
 }
+apply plugin: "org.flywaydb.flyway"
 
 group = 'org.study'
 version = '1.0-SNAPSHOT'
@@ -12,6 +14,18 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    implementation 'org.flywaydb:flyway-core:9.20.1'
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    implementation 'com.h2database:h2:2.1.214'
+// https://mvnrepository.com/artifact/org.projectlombok/lombok
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+
+
+// https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    implementation 'org.hibernate.orm:hibernate-core:6.1.0.Final'
+
 }
 
 test {
