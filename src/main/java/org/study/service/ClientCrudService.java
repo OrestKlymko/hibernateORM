@@ -2,9 +2,14 @@ package org.study.service;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.study.database.HibernateUtil;
 import org.study.entity.Client;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 public class ClientCrudService {
 	private final Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
@@ -74,6 +79,17 @@ public class ClientCrudService {
 				session.close();
 			}
 		}
-
 	}
+	public int getCountTickets(int id) {
+		NativeQuery nativeQuery = session.createNativeQuery("SELECT COUNT(*) FROM ticket WHERE client_id = ?");
+		nativeQuery.setParameter(1, id);
+		List<Object> result = nativeQuery.getResultList();
+		if (!result.isEmpty() && result.get(0) instanceof Number) {
+			Number count = (Number) result.get(0);
+			return count.intValue();
+		} else {
+			return 0;
+		}
+	}
+
 }
