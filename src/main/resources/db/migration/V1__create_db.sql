@@ -7,9 +7,8 @@ CREATE TABLE client
 
 CREATE TABLE planet
 (
-    ID INT AUTO_INCREMENT NOT NULL,
-    NAME VARCHAR(500) CHECK (LENGTH(NAME) >= 1 AND LENGTH(NAME) <= 500),
-    PRIMARY KEY(ID)
+    ID VARCHAR(50) PRIMARY KEY,
+    NAME VARCHAR(500) CHECK (LENGTH(NAME) >= 1 AND LENGTH(NAME) <= 500)
 );
 
 CREATE TABLE ticket
@@ -17,8 +16,8 @@ CREATE TABLE ticket
     ID INT AUTO_INCREMENT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     client_id INT NOT NULL,
-    from_planet_id INT NOT NULL,
-    to_planet_id INT NOT NULL,
+    from_planet_id VARCHAR(50) NOT NULL,
+    to_planet_id VARCHAR(50) NOT NULL,
     FOREIGN KEY (client_id) REFERENCES client(ID),
     FOREIGN KEY (from_planet_id) REFERENCES planet(ID),
     FOREIGN KEY (to_planet_id) REFERENCES planet(ID)

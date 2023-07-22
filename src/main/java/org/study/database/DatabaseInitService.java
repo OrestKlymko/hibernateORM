@@ -5,7 +5,7 @@ import org.flywaydb.core.Flyway;
 
 public class DatabaseInitService {
 
-	public static void main(String[] args) {
+	public void migrateDatabase() {
 		Flyway flyway = Flyway.configure().dataSource(DbConstants.CONNECTION_URL,"","").load();
 		flyway.migrate();
 	}

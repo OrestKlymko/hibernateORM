@@ -9,12 +9,13 @@ import lombok.Data;
 @Table(name = "planet")
 public class Planet {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private String id;
 
 	@Column(name = "name")
 	private String planetName;
 
-
+	public void setId(String id) {
+		this.id = id.toUpperCase();
+	}
 }

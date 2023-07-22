@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.study.entity.Client;
+import org.study.entity.Planet;
 
 public class HibernateUtil {
 	private static final HibernateUtil INSTANCE;

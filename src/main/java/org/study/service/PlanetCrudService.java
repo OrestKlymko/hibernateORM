@@ -15,8 +15,8 @@ public class PlanetCrudService {
 		return session.createQuery("from Planet").getResultList();
 	}
 
-	public Planet getPlanet(int id){
-		return session.get(Planet.class,id);
+	public Planet getPlanet(String id){
+		return session.get(Planet.class,id.toUpperCase());
 
 	}
 
@@ -40,10 +40,10 @@ public class PlanetCrudService {
 
 	}
 
-	public void deletePlanet(int findId){
+	public void deletePlanet(String findId){
 		try{
 			transaction = session.beginTransaction();
-			Planet planet = session.get(Planet.class, findId);
+			Planet planet = session.get(Planet.class, findId.toUpperCase());
 			session.remove(planet);
 			transaction.commit();
 			session.close();
@@ -60,10 +60,10 @@ public class PlanetCrudService {
 
 	}
 
-	public void updatePlanet(int id, String name){
+	public void updatePlanet(String id, String name){
 		try {
 			transaction = session.beginTransaction();
-			Planet planet = session.get(Planet.class, id);
+			Planet planet = session.get(Planet.class, id.toUpperCase());
 			planet.setPlanetName(name);
 			transaction.commit();
 			session.close();
