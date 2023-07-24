@@ -1,6 +1,7 @@
 package org.study.service;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.study.database.HibernateUtil;
@@ -13,10 +14,11 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class ClientCrudService {
-	private final Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+	private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
 	private Transaction transaction;
 
 	public List<Client> getAllClients() {
+		Session session = sessionFactory.openSession();
 		try {
 			return session.createQuery("from Client ").getResultList();
 		} catch (Exception e){
@@ -28,6 +30,7 @@ public class ClientCrudService {
 	}
 
 	public Client getClient(int id) {
+		Session session = sessionFactory.openSession();
 		try {
 			return session.get(Client.class, id);
 		}catch (Exception e) {
@@ -38,6 +41,7 @@ public class ClientCrudService {
 	}
 
 	public void createClient(Client newClient) {
+		Session session = sessionFactory.openSession();
 		try {
 			transaction = session.beginTransaction();
 			session.persist(newClient);
@@ -57,6 +61,7 @@ public class ClientCrudService {
 	}
 
 	public void deleteClient(int findId) {
+		Session session = sessionFactory.openSession();
 		try {
 			transaction = session.beginTransaction();
 			Client client = session.get(Client.class, findId);
@@ -76,6 +81,7 @@ public class ClientCrudService {
 	}
 
 	public void updateClient(int id, String name) {
+		Session session = sessionFactory.openSession();
 		try {
 			transaction = session.beginTransaction();
 			Client client = session.get(Client.class, id);

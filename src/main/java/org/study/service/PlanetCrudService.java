@@ -1,6 +1,7 @@
 package org.study.service;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.study.database.HibernateUtil;
 import org.study.entity.Planet;
@@ -8,19 +9,36 @@ import org.study.entity.Planet;
 import java.util.List;
 
 public class PlanetCrudService {
-	private final Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
+	private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
 	private Transaction transaction;
 
 	public List<Planet> getAllPlanets(){
-		return session.createQuery("from Planet").getResultList();
+		Session session = sessionFactory.openSession();
+		try {
+			return session.createQuery("from Planet").getResultList();
+		}catch (Exception e){
+			throw new RuntimeException("Something wrong");
+		}finally {
+			session.close();
+		}
+
 	}
 
 	public Planet getPlanet(String id){
-		return session.get(Planet.class,id.toUpperCase());
+		Session session = sessionFactory.openSession();
+		try {
+			return session.get(Planet.class,id.toUpperCase());
+		}catch (Exception e){
+			throw new RuntimeException("Something wrong");
+		}finally {
+			session.close();
+		}
+
 
 	}
 
 	public void createPlanet(Planet newPlanet){
+		Session session = sessionFactory.openSession();
 		try {
 			transaction = session.beginTransaction();
 			session.persist(newPlanet);
@@ -41,6 +59,7 @@ public class PlanetCrudService {
 	}
 
 	public void deletePlanet(String findId){
+		Session session = sessionFactory.openSession();
 		try{
 			transaction = session.beginTransaction();
 			Planet planet = session.get(Planet.class, findId.toUpperCase());
@@ -61,6 +80,7 @@ public class PlanetCrudService {
 	}
 
 	public void updatePlanet(String id, String name){
+		Session session = sessionFactory.openSession();
 		try {
 			transaction = session.beginTransaction();
 			Planet planet = session.get(Planet.class, id.toUpperCase());
