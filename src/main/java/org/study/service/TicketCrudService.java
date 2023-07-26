@@ -24,16 +24,22 @@ public class TicketCrudService {
 		}
 	}
 
-	public void buyTicket(int idClient, Planet fromPlanet, Planet toPlanet) {
+	public void buyTicket(int idClient, String fromPlanet, String toPlanet) {
 		try (Session session = sessionFactory.openSession()) {
 			transaction = session.beginTransaction();
 			Client client = session.get(Client.class, idClient);
-			Ticket ticket = new Ticket();
-			ticket.setClient(client);
-			ticket.setPlanetFrom(fromPlanet);
-			ticket.setPlanetTo(toPlanet);
-			session.persist(ticket);
-			transaction.commit();
+			Planet fromPlanetFind = session.get(Planet.class,fromPlanet);
+			Planet toPlanetFind = session.get(Planet.class,toPlanet);
+			if (client!=null&&fromPlanetFind!=null&&toPlanetFind!=null) {
+				Ticket ticket = new Ticket();
+				ticket.setClient(client);
+				ticket.setPlanetFrom(fromPlanetFind);
+				ticket.setPlanetTo(toPlanetFind);
+				session.persist(ticket);
+				transaction.commit();
+			} else {
+				System.out.println("Please check your input data");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,9 +49,13 @@ public class TicketCrudService {
 		try (Session session = sessionFactory.openSession()) {
 			transaction = session.beginTransaction();
 			Client client = session.get(Client.class, clientID);
-			Ticket findTicket = client.getTickets().get(ticket.getId());
-			session.remove(findTicket);
-			transaction.commit();
+			if (client!=null) {
+				Ticket findTicket = client.getTickets().get(ticket.getId());
+				session.remove(findTicket);
+				transaction.commit();
+			}else {
+				System.out.println("Client not found");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
