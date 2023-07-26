@@ -13,23 +13,19 @@ public class Main {
 		new DatabaseInitService().migrateDatabase();
 
 		TicketCrudService ticketCrudService = new TicketCrudService();
-		PlanetCrudService planetCrudService = new PlanetCrudService();
 		ClientCrudService clientCrudService = new ClientCrudService();
 
 
-		Planet mars = planetCrudService.getPlanet("MARS");
-		Planet venera = planetCrudService.getPlanet("VEN");
 
 
 		Ticket newTicket = new Ticket();
 		Client client = clientCrudService.getClient(1);
 
 		newTicket.setClient(client);
-		newTicket.setPlanetTo(venera);
-		newTicket.setPlanetFrom(mars);
 
 
-		ticketCrudService.buyTicket(2,mars,venera); // create new ticket
+
+		ticketCrudService.buyTicket(4,"MARS","VEN"); // create new ticket
 		ticketCrudService.changeTicket(1,newTicket); // update ticket in client
 		System.out.println(ticketCrudService.getAllTicketsOfClient(1)); // get ticket in client
 		ticketCrudService.returnTicket(client.getId(),newTicket); // delete ticket in client
