@@ -3,31 +3,36 @@ package org.study;
 import org.study.database.DatabaseInitService;
 import org.study.entity.Client;
 import org.study.entity.Planet;
+import org.study.entity.Ticket;
 import org.study.service.ClientCrudService;
 import org.study.service.PlanetCrudService;
+import org.study.service.TicketCrudService;
 
 public class Main {
 	public static void main(String[] args) {
 		new DatabaseInitService().migrateDatabase();
-//		ClientCrudService clientService = new ClientCrudService();
-//		Client client = new Client();
-//		client.setName("New client");
-//		clientService.createClient(client);
-//		clientService.updateClient(1,"Name Changed");// updated
-//		System.out.println(clientService.getClient(1));//get by id
-//		clientService.deleteClient(2);// delete by id
-//		clientService.deleteClient(2);// delete by id
+
+		TicketCrudService ticketCrudService = new TicketCrudService();
+		PlanetCrudService planetCrudService = new PlanetCrudService();
+		ClientCrudService clientCrudService = new ClientCrudService();
 
 
+		Planet mars = planetCrudService.getPlanet("MARS");
+		Planet venera = planetCrudService.getPlanet("VEN");
 
-		PlanetCrudService planet = new PlanetCrudService();
-		Planet neptun = new Planet();
-		neptun.setId("Neptun");
-		neptun.setPlanetName("Neptun");
 
-		planet.createPlanet(neptun); // create new planet
-		planet.updatePlanet("neptun","NePtUn"); // update planet
-		System.out.println(planet.getPlanet("neptun"));// get planet by id
-		planet.deletePlanet("neptun"); // delete planet
+		Ticket newTicket = new Ticket();
+		Client client = clientCrudService.getClient(1);
+
+		newTicket.setClient(client);
+		newTicket.setPlanetTo(venera);
+		newTicket.setPlanetFrom(mars);
+
+
+		ticketCrudService.buyTicket(2,mars,venera); // create new ticket
+		ticketCrudService.changeTicket(1,newTicket); // update ticket in client
+		System.out.println(ticketCrudService.getAllTicketsOfClient(1)); // get ticket in client
+		ticketCrudService.returnTicket(client.getId(),newTicket); // delete ticket in client
+
 	}
 }

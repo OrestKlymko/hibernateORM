@@ -3,6 +3,9 @@ package org.study.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -15,5 +18,10 @@ public class Client {
 
 	@Column(name = "name")
 	private String name;
+
+	@OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+	@ToString.Exclude
+	private List<Ticket> tickets;
+
 
 }
