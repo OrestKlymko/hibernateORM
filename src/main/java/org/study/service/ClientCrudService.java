@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.study.database.HibernateUtil;
 import org.study.entity.Client;
+import org.study.entity.Ticket;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -17,6 +18,15 @@ public class ClientCrudService {
 	private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
 	private Transaction transaction;
 
+	public List<Ticket> getAllTicketsOfClient(int id) {
+		try (Session session = sessionFactory.openSession()) {
+			Client client = session.get(Client.class, id);
+			return client.getTickets();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public List<Client> getAllClients() {
 		Session session = sessionFactory.openSession();
 		try {

@@ -14,22 +14,31 @@ public class TicketCrudService {
 	private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
 	private Transaction transaction;
 
-	public List<Ticket> getAllTicketsOfClient(int id) {
-		try (Session session = sessionFactory.openSession()) {
-			Client client = session.get(Client.class, id);
-			return client.getTickets();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+
+	public Ticket getTicket(int id){
+		try(Session session = sessionFactory.openSession()) {
+			return session.get(Ticket.class,id);
+		}catch (Exception e){
+			throw new RuntimeException("Unknown ticket");
 		}
 	}
 
-	public void buyTicket(int idClient, String fromPlanet, String toPlanet) {
+	public List<Ticket> getAllTickets(){
+		try(Session session = sessionFactory.openSession()) {
+			return session.createQuery("from Ticket").getResultList();
+		}catch (Exception e){
+			throw new RuntimeException("Error with something");
+		}
+	}
+
+	public void createTicket(int idClient, String fromPlanet, String toPlanet) {
 		try (Session session = sessionFactory.openSession()) {
 			transaction = session.beginTransaction();
-			Client client = session.get(Client.class, idClient);
+			Client client = new ClientCrudService().getClient(idClient);
+
 			Planet fromPlanetFind = session.get(Planet.class,fromPlanet);
 			Planet toPlanetFind = session.get(Planet.class,toPlanet);
+			
 			if (client!=null&&fromPlanetFind!=null&&toPlanetFind!=null) {
 				Ticket ticket = new Ticket();
 				ticket.setClient(client);
@@ -45,10 +54,10 @@ public class TicketCrudService {
 		}
 	}
 
-	public void returnTicket(int clientID, Ticket ticket) {
+	public void deleteTicket(int clientID, Ticket ticket) {
 		try (Session session = sessionFactory.openSession()) {
 			transaction = session.beginTransaction();
-			Client client = session.get(Client.class, clientID);
+			Client client = new ClientCrudService().getClient(clientID);
 			if (client!=null) {
 				Ticket findTicket = client.getTickets().get(ticket.getId());
 				session.remove(findTicket);
@@ -61,10 +70,10 @@ public class TicketCrudService {
 		}
 	}
 
-	public void changeTicket(int idTicket, Ticket ticket) {
+	public void updateTicket(int idTicket, Ticket ticket) {
 		try (Session session = sessionFactory.openSession()) {
 			transaction = session.beginTransaction();
-			Ticket ticket1 = session.get(Ticket.class, idTicket);
+			Ticket ticket1 = getTicket(idTicket);
 			if(ticket1!=null){
 				ticket1.setPlanetFrom(ticket.getPlanetFrom());
 				ticket1.setPlanetTo(ticket.getPlanetTo());

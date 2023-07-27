@@ -18,15 +18,6 @@ public class Planet {
 	@Column(name = "name")
 	private String planetName;
 
-	@OneToMany(mappedBy = "planetFrom")
-	@ToString.Exclude
-	private List<Ticket> departingTickets;
-
-	@OneToMany(mappedBy = "planetTo")
-	@ToString.Exclude
-	private List<Ticket> arrivingTickets;
-
-
 	public void setId(String id) {
 		this.id = id.toUpperCase();
 	}
